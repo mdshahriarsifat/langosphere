@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-<base target="_top">
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LangoSphere Academy – Dashboard</title>
 <style>
   :root {
     --accent:#B45309; --accent2:#185FA5; --bg:#F5F0E8; --card:#FFFDF7;
@@ -13,32 +14,13 @@
   * { box-sizing:border-box; margin:0; padding:0; }
   body { font-family:-apple-system,"Segoe UI",Roboto,sans-serif; background:var(--bg); color:var(--text); }
 
-  /* ===== AUTH SCREENS ===== */
-  #authHeader { display:none !important; }
-  #authHeader .brand { display:flex; align-items:center; gap:10px; font-weight:800; font-size:20px; color:var(--text); }
-  #authHeader .brand .logo-icon { width:36px; height:36px; border-radius:10px; background:linear-gradient(135deg,#F5A623,#E07B00); display:flex; align-items:center; justify-content:center; font-size:18px; }
-  main.centered { max-width:480px; margin:60px auto; padding:0 20px; }
-  .card { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:32px; margin-bottom:20px; }
-  .card h1 { font-size:24px; font-weight:700; margin-bottom:8px; }
-  .card p { color:var(--muted); font-size:14px; margin-bottom:24px; line-height:1.5; }
-  input { width:100%; padding:14px 16px; margin:8px 0; border-radius:10px; border:1px solid var(--border); font-size:15px; background:#F5F0E8; color:var(--text); outline:none; transition:border-color .2s; }
-  input:focus { border-color:var(--accent2); }
-  input::placeholder { color:var(--muted); }
-  button.btn-primary { width:100%; padding:14px; margin:8px 0; border-radius:10px; border:none; font-size:15px; font-weight:700; background:var(--accent); color:#111; cursor:pointer; transition:opacity .15s; }
-  button.btn-primary:hover { opacity:0.88; }
-  button.btn-primary:disabled { opacity:0.5; cursor:default; }
-  button.btn-secondary { width:100%; padding:14px; margin:8px 0; border-radius:10px; border:1px solid var(--border); font-size:15px; font-weight:600; background:transparent; color:var(--text); cursor:pointer; transition:border-color .2s; }
-  button.btn-secondary:hover { border-color:var(--accent2); color:var(--accent2); }
-  button.btn-primary { color:#fff; }
-  .error { color:var(--error); font-size:13px; min-height:18px; margin-top:4px; }
-  .link-btn { background:none; border:none; color:var(--accent2); text-decoration:underline; width:auto; padding:0; font-size:14px; cursor:pointer; margin-top:12px; }
   .hidden { display:none !important; }
   .badge { display:inline-block; padding:3px 10px; border-radius:100px; font-size:11px; font-weight:700; letter-spacing:.3px; }
   .badge.free { background:var(--free-bg); color:var(--free-text); }
   .badge.owned { background:var(--owned-bg); color:var(--owned-text); }
   .badge.premium { background:rgba(245,166,35,0.18); color:var(--accent); }
 
-  /* ===== DASHBOARD ===== */
+  /* ===== DASHBOARD LAYOUT ===== */
   .dashboard-layout { display:flex; min-height:100vh; }
 
   /* Sidebar */
@@ -50,10 +32,6 @@
   .sidebar-user { padding:14px 20px; border-bottom:1px solid var(--border); }
   .sidebar-user-name { font-size:13px; font-weight:600; color:var(--text); }
   .sidebar-user-sub { font-size:11px; color:var(--muted); margin-top:2px; }
-  .sidebar-streak { display:flex; align-items:center; gap:6px; background:rgba(245,166,35,0.1); border:1px solid rgba(245,166,35,0.2); border-radius:8px; padding:6px 10px; margin-top:10px; }
-  .sidebar-streak .streak-icon { font-size:16px; }
-  .sidebar-streak .streak-text { font-size:12px; font-weight:700; color:var(--accent); }
-  .sidebar-streak .streak-label { font-size:11px; color:var(--muted); }
   .sidebar-nav { padding:12px 10px; flex:1; }
   .sidebar-section-label { font-size:10px; font-weight:700; color:var(--muted); letter-spacing:1px; padding:10px 10px 6px; text-transform:uppercase; }
   .sidebar-btn { display:flex; align-items:center; gap:12px; width:100%; background:none; border:none; text-align:left; padding:11px 12px; border-radius:10px; color:var(--muted); font-weight:500; font-size:14px; cursor:pointer; transition:all .15s; margin:2px 0; white-space:nowrap; }
@@ -67,8 +45,6 @@
   .sidebar-telegram .tg-title { font-size:12px; font-weight:700; color:var(--accent); display:flex; align-items:center; gap:6px; margin-bottom:4px; }
   .sidebar-telegram .tg-desc { font-size:11px; color:var(--muted); line-height:1.4; }
   .sidebar-telegram .tg-btn { display:block; margin-top:8px; background:var(--accent); color:#111; font-size:12px; font-weight:700; padding:7px 12px; border-radius:7px; text-align:center; text-decoration:none; border:none; cursor:pointer; width:100%; }
-  .logout-btn { display:flex; align-items:center; gap:8px; background:none; border:none; color:var(--muted); font-size:13px; cursor:pointer; padding:6px 4px; width:100%; }
-  .logout-btn:hover { color:var(--error); }
 
   /* Main content */
   .dashboard-main { flex:1; overflow-y:auto; }
@@ -81,7 +57,6 @@
   .hero-banner h1 { font-size:28px; font-weight:800; margin-bottom:6px; }
   .hero-banner h1 span { color:var(--accent); }
   .hero-banner p { color:var(--muted); font-size:14px; }
-  /* streak-badge removed */
 
   /* Section headings */
   .section-title { font-size:16px; font-weight:700; margin-bottom:16px; display:flex; align-items:center; gap:8px; }
@@ -132,13 +107,11 @@
   .resource-card h3 { font-size:14px; font-weight:700; margin-bottom:6px; color:var(--text); }
   .resource-card p { font-size:12px; color:var(--muted); line-height:1.5; }
 
-  /* Empty state */
   .empty-state { color:var(--muted); font-size:14px; padding:40px 0; text-align:center; }
 
   /* Responsive */
   @media (max-width:800px) {
     .dashboard-layout { flex-direction:column; }
-    /* Sidebar becomes a fixed bottom tab bar on mobile */
     .sidebar {
       position:fixed; bottom:0; left:0; right:0; width:100%;
       flex-direction:row; align-items:stretch;
@@ -161,59 +134,17 @@
     }
     .sidebar-btn svg { width:20px; height:20px; }
     .sidebar-btn .nav-badge { display:none; }
-    /* hide desktop logout in nav on mobile, show mobile logout bar instead */
-    #logoutBtn { display:none !important; }
-    #mobileLogoutBar { display:flex !important; }
     .dashboard-main { padding-bottom:64px; }
     .content-area { padding:16px; }
     .hero-banner { flex-direction:column; gap:14px; padding:20px; }
     .hero-banner h1 { font-size:20px; }
     .lessons-grid, .flagship-grid, .resources-grid { grid-template-columns:1fr; }
   }
-  @media (min-width:801px) {
-    .dashboard-main { padding-bottom:0; }
-  }
 </style>
 </head>
 <body>
 
-<!-- ===== AUTH SCREENS ===== -->
-<header id="authHeader">
-  <div class="brand">
-    <div class="logo-icon">🌐</div>
-    LangoSphere
-  </div>
-</header>
-
-<main class="centered">
-  <div id="screen-home" class="card">
-    <h1>Learn a new language</h1>
-    <p>Register for a free account to unlock intro classes, then upgrade to full flagship courses when you're ready.</p>
-    <button id="goRegisterBtn" class="btn-primary">Create free account</button>
-    <button id="goLoginBtn" class="btn-secondary">I already have an account</button>
-  </div>
-
-  <div id="screen-details" class="card hidden">
-    <h1 id="detailsTitle">Create your account</h1>
-    <p>Join thousands of learners mastering Japanese & Chinese.</p>
-    <input id="nameInput" placeholder="Full name">
-    <input id="emailInput" placeholder="Email address" type="email">
-    <button id="sendCodeBtn" class="btn-primary">Send verification code</button>
-    <p id="detailsError" class="error"></p>
-    <button class="link-btn" id="backFromDetailsBtn">← Back</button>
-  </div>
-
-  <div id="screen-code" class="card hidden">
-    <h1>Check your email</h1>
-    <p>We sent a 6-digit code to <strong id="emailShown"></strong>.</p>
-    <input id="codeInput" placeholder="6-digit code" inputmode="numeric" maxlength="6">
-    <button id="verifyBtn" class="btn-primary">Verify & Enter</button>
-    <p id="codeError" class="error"></p>
-  </div>
-</main>
-
-<!-- ===== DASHBOARD ===== -->
-<div id="screen-dashboard" class="dashboard-layout hidden">
+<div class="dashboard-layout">
 
   <!-- Sidebar -->
   <aside class="sidebar">
@@ -226,9 +157,8 @@
     </div>
 
     <div class="sidebar-user">
-      <div class="sidebar-user-name" id="sidebarName">—</div>
-      <div class="sidebar-user-sub">Learner Dashboard • Free Member</div>
-
+      <div class="sidebar-user-name">Guest Learner</div>
+      <div class="sidebar-user-sub">Demo Dashboard • Free Member</div>
     </div>
 
     <nav class="sidebar-nav">
@@ -252,47 +182,29 @@
         Resources & PDFs
         <span class="nav-badge badge premium">PDFs</span>
       </button>
-      <div style="margin-top:auto;padding-top:16px;border-top:1px solid var(--border);margin-left:0;">
-        <button class="sidebar-btn" id="logoutBtn" style="color:var(--error);">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
-          Log out
-        </button>
-      </div>
     </nav>
 
     <div class="sidebar-footer">
       <div class="sidebar-telegram">
-        <div class="tg-title">📢 VIP TELEGRAM CHANNEL</div>
+        <div class="tg-title">📢 TELEGRAM COMMUNITY</div>
         <div class="tg-desc">Join 4,500+ learners for daily audio quizzes & lesson updates.</div>
-        <a href="https://t.me/langosphere_paid" target="_blank" class="tg-btn">Join VIP Telegram →</a>
+        <a href="https://t.me/langosphere" target="_blank" class="tg-btn">Join Telegram →</a>
       </div>
-      <button class="logout-btn" id="logoutBtnFooter" style="display:none;">
-        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
-        Log out
-      </button>
     </div>
   </aside>
 
   <!-- Main -->
   <div class="dashboard-main">
     <div class="content-area">
-      <!-- Mobile-only logout bar -->
-      <div id="mobileLogoutBar" style="display:none;justify-content:flex-end;margin-bottom:12px;">
-        <button id="logoutBtnMobile" style="background:none;border:1px solid var(--border);border-radius:8px;padding:7px 14px;font-size:13px;color:var(--error);cursor:pointer;display:flex;align-items:center;gap:6px;">
-          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
-          Log out
-        </button>
-      </div>
 
       <!-- HOME section -->
       <div id="sectionHome">
         <div class="hero-banner">
           <div>
             <div class="hero-eyebrow">🎓 Learner Dashboard • Free Member</div>
-            <h1>Welcome back, <span id="welcomeName">there</span>! 👋</h1>
-            <p>You are on track to master conversational fluency. Keep your momentum going today!</p>
+            <h1>Welcome, <span>Guest</span>! 👋</h1>
+            <p>Explore our free library or upgrade to premium courses for full access.</p>
           </div>
-
         </div>
 
         <div class="section-title"><span class="icon">▶️</span> Continue Learning — Free Classes</div>
@@ -309,7 +221,7 @@
             <p>Explore our collection of free video lessons, pronunciation guides, and downloadable cheat sheets.</p>
           </div>
           <a href="#" onclick="switchNav('navCoursesBtn','sectionCourses');return false;" style="flex-shrink:0;">
-            <button class="btn-primary" style="width:auto;padding:12px 20px;font-size:13px;">Upgrade to Premium Course</button>
+            <button class="btn-primary" style="width:auto;padding:12px 20px;font-size:13px;background:var(--accent);color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;">Upgrade to Premium Course</button>
           </a>
         </div>
         <div class="tabs" id="libraryTabsEl"></div>
@@ -345,25 +257,7 @@
 </div><!-- dashboard-layout -->
 
 <script>
-// ======================= BACKEND ENDPOINT =======================
-const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwT0wgZ43M7RXqpb0QQZAJUS3MFfQKabnxaCi9uAFsYoBeof5SFRk0GNsgAT9vIyH7J/exec';
-
-// Helper: call backend via POST with JSON
-function callBackend(action, payload) {
-  return fetch(WEB_APP_URL, {
-    method: 'POST',
-    mode: 'cors',        // optional but safe
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ action, ...payload })
-  })
-  .then(res => res.json())
-  .then(response => {
-    if (!response.success) throw new Error(response.error || 'Unknown error');
-    return response.data;
-  });
-}
-
-// ======================= DATA =======================
+// ======================= STATIC DATA (no backend) =======================
 const FREE_LESSONS = {
   japanese: [
     { youtubeId:"KpAg9cXOSwQ", title:"Japanese Free Class 1: Intro to Japanese & Essential Greetings" },
@@ -407,79 +301,11 @@ const RESOURCES = [
 ];
 
 // ======================= STATE =======================
-let pendingEmail = "", pendingIsRegister = true;
-let dashboardCourses = [], activeLangFilter = "all";
-let currentUser = null;
-
-// ======================= AUTH UI =======================
-function show(id) {
-  ["screen-home","screen-details","screen-code","screen-dashboard"].forEach(s => {
-    document.getElementById(s).classList.toggle("hidden", s !== id);
-  });
-  document.getElementById("authHeader").classList.toggle("hidden", id === "screen-dashboard");
-}
-
-document.getElementById("goRegisterBtn").onclick = () => {
-  pendingIsRegister = true;
-  document.getElementById("detailsTitle").textContent = "Create your account";
-  document.getElementById("nameInput").classList.remove("hidden");
-  show("screen-details");
-};
-document.getElementById("goLoginBtn").onclick = () => {
-  pendingIsRegister = false;
-  document.getElementById("detailsTitle").textContent = "Log in";
-  document.getElementById("nameInput").classList.add("hidden");
-  show("screen-details");
-};
-document.getElementById("backFromDetailsBtn").onclick = () => show("screen-home");
-
-document.getElementById("sendCodeBtn").onclick = () => {
-  const email = document.getElementById("emailInput").value.trim();
-  const err = document.getElementById("detailsError");
-  err.textContent = "";
-  if (!email) { err.textContent = "Enter your email."; return; }
-  const btn = document.getElementById("sendCodeBtn");
-  btn.disabled = true; btn.textContent = "Sending...";
-  callBackend('sendOtp', { email })
-    .then(() => {
-      pendingEmail = email;
-      document.getElementById("emailShown").textContent = email;
-      btn.disabled = false; btn.textContent = "Send verification code";
-      show("screen-code");
-    })
-    .catch(e => {
-      btn.disabled = false; btn.textContent = "Send verification code";
-      err.textContent = e.message;
-    });
-};
-
-document.getElementById("verifyBtn").onclick = () => {
-  const code = document.getElementById("codeInput").value.trim();
-  const name = document.getElementById("nameInput").value.trim();
-  const err = document.getElementById("codeError");
-  err.textContent = "";
-  const btn = document.getElementById("verifyBtn");
-  btn.disabled = true; btn.textContent = "Verifying...";
-  callBackend('verifyOtp', { email: pendingEmail, code, name: pendingIsRegister ? name : "" })
-    .then(result => {
-      localStorage.setItem("langosphere_token", result.token);
-      btn.disabled = false; btn.textContent = "Verify & Enter";
-      loadDashboard();
-    })
-    .catch(e => {
-      btn.disabled = false; btn.textContent = "Verify & Enter";
-      err.textContent = e.message;
-    });
-};
-
-document.getElementById("logoutBtn").onclick = () => {
-  localStorage.removeItem("langosphere_token");
-  show("screen-home");
-};
-document.getElementById("logoutBtnMobile").onclick = () => {
-  localStorage.removeItem("langosphere_token");
-  show("screen-home");
-};
+let dashboardCourses = [
+  { id:"japanese", name:"Japanese", owned:false, freeLessons: FREE_LESSONS.japanese },
+  { id:"chinese", name:"Chinese", owned:false, freeLessons: FREE_LESSONS.chinese },
+];
+let activeLangFilter = "all";
 
 // ======================= NAV =======================
 const SECTIONS = { navHomeBtn:"sectionHome", navLibraryBtn:"sectionLibrary", navCoursesBtn:"sectionCourses", navResourcesBtn:"sectionResources" };
@@ -529,13 +355,12 @@ function buildLessonSection(tabsId, gridId) {
 function setFilter(id, tabsId, gridId) {
   activeLangFilter = id;
   buildLessonSection(tabsId, gridId);
-  // keep both grids in sync
   if (tabsId === "homeTabsEl") buildLessonSection("libraryTabsEl","libraryLessonsGrid");
   else buildLessonSection("homeTabsEl","homeLessonsGrid");
 }
 
 function renderFlagship() {
-  const owned = new Set((dashboardCourses || []).filter(c => c.owned).map(c => c.id));
+  const owned = new Set(dashboardCourses.filter(c => c.owned).map(c => c.id));
   document.getElementById("flagshipGrid").innerHTML = FLAGSHIP.map(f => `
     <div class="flagship-card">
       <div class="flagship-thumb">
@@ -567,38 +392,15 @@ function renderResources() {
     </div>`).join("");
 }
 
-// ======================= LOAD DASHBOARD =======================
-function loadDashboard() {
-  const token = localStorage.getItem("langosphere_token");
-  if (!token) { show("screen-home"); return; }
-  callBackend('getDashboardData', { token })
-    .then(data => {
-      currentUser = data;
-      const name = data.name || "there";
-      document.getElementById("welcomeName").textContent = name;
-      document.getElementById("sidebarName").textContent = name;
-      dashboardCourses = (data.courses || []).map(c => ({
-        ...c,
-        freeLessons: FREE_LESSONS[c.id] || [],
-      }));
-      // fallback: if backend doesn't have Chinese, add it
-      if (!dashboardCourses.find(c => c.id === "chinese")) {
-        dashboardCourses.push({ id:"chinese", name:"Chinese", owned:false, freeLessons: FREE_LESSONS.chinese });
-      }
-      buildLessonSection("homeTabsEl","homeLessonsGrid");
-      buildLessonSection("libraryTabsEl","libraryLessonsGrid");
-      renderFlagship();
-      renderResources();
-      show("screen-dashboard");
-    })
-    .catch(() => {
-      localStorage.removeItem("langosphere_token");
-      show("screen-home");
-    });
+// ======================= INIT =======================
+function init() {
+  buildLessonSection("homeTabsEl","homeLessonsGrid");
+  buildLessonSection("libraryTabsEl","libraryLessonsGrid");
+  renderFlagship();
+  renderResources();
 }
 
-// Start the app
-loadDashboard();
+init();
 </script>
 </body>
 </html>
