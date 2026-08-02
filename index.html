@@ -345,6 +345,24 @@
 </div><!-- dashboard-layout -->
 
 <script>
+// ======================= BACKEND ENDPOINT =======================
+const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwT0wgZ43M7RXqpb0QQZAJUS3MFfQKabnxaCi9uAFsYoBeof5SFRk0GNsgAT9vIyH7J/exec';
+
+// Helper: call backend via POST with JSON
+function callBackend(action, payload) {
+  return fetch(WEB_APP_URL, {
+    method: 'POST',
+    mode: 'cors',        // optional but safe
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ action, ...payload })
+  })
+  .then(res => res.json())
+  .then(response => {
+    if (!response.success) throw new Error(response.error || 'Unknown error');
+    return response.data;
+  });
+}
+
 // ======================= DATA =======================
 const FREE_LESSONS = {
   japanese: [
@@ -422,18 +440,17 @@ document.getElementById("sendCodeBtn").onclick = () => {
   if (!email) { err.textContent = "Enter your email."; return; }
   const btn = document.getElementById("sendCodeBtn");
   btn.disabled = true; btn.textContent = "Sending...";
-  google.script.run
-    .withSuccessHandler(() => {
+  callBackend('sendOtp', { email })
+    .then(() => {
       pendingEmail = email;
       document.getElementById("emailShown").textContent = email;
       btn.disabled = false; btn.textContent = "Send verification code";
       show("screen-code");
     })
-    .withFailureHandler(e => {
+    .catch(e => {
       btn.disabled = false; btn.textContent = "Send verification code";
       err.textContent = e.message;
-    })
-    .sendOtp(email);
+    });
 };
 
 document.getElementById("verifyBtn").onclick = () => {
@@ -443,17 +460,16 @@ document.getElementById("verifyBtn").onclick = () => {
   err.textContent = "";
   const btn = document.getElementById("verifyBtn");
   btn.disabled = true; btn.textContent = "Verifying...";
-  google.script.run
-    .withSuccessHandler(result => {
+  callBackend('verifyOtp', { email: pendingEmail, code, name: pendingIsRegister ? name : "" })
+    .then(result => {
       localStorage.setItem("langosphere_token", result.token);
       btn.disabled = false; btn.textContent = "Verify & Enter";
       loadDashboard();
     })
-    .withFailureHandler(e => {
+    .catch(e => {
       btn.disabled = false; btn.textContent = "Verify & Enter";
       err.textContent = e.message;
-    })
-    .verifyOtp(pendingEmail, code, pendingIsRegister ? name : "");
+    });
 };
 
 document.getElementById("logoutBtn").onclick = () => {
@@ -551,12 +567,12 @@ function renderResources() {
     </div>`).join("");
 }
 
-// ======================= LOAD =======================
+// ======================= LOAD DASHBOARD =======================
 function loadDashboard() {
   const token = localStorage.getItem("langosphere_token");
   if (!token) { show("screen-home"); return; }
-  google.script.run
-    .withSuccessHandler(data => {
+  callBackend('getDashboardData', { token })
+    .then(data => {
       currentUser = data;
       const name = data.name || "there";
       document.getElementById("welcomeName").textContent = name;
@@ -575,13 +591,13 @@ function loadDashboard() {
       renderResources();
       show("screen-dashboard");
     })
-    .withFailureHandler(() => {
+    .catch(() => {
       localStorage.removeItem("langosphere_token");
       show("screen-home");
-    })
-    .getDashboardData(token);
+    });
 }
 
+// Start the app
 loadDashboard();
 </script>
 </body>
